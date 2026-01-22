@@ -3,305 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HBD My Special One 🎂</title>
-
-<!-- Confetti -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;600&family=Caveat:wght@700&family=Mali:wght@400;700&display=swap" rel="stylesheet">
+<title>Candle Flame Control</title>
 
 <style>
-:root{
-  --pink:#ff85a2;
-  --soft-pink:#ffe4ec;
-  --dark:#1a1a2e;
-}
-
-*{box-sizing:border-box;}
-
-html,body{
+body{
   margin:0;
-  width:100%;
-  height:100%;
-  font-family:'Kanit',sans-serif;
-  overflow:hidden;
-}
-
-/* ---------- PAGE 1 ---------- */
-#page-1{
-  position:fixed;
-  inset:0;
-  background:radial-gradient(circle at top,#2a2a5a,#0f0f1e);
+  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  z-index:10;
-  transition:opacity 1s ease;
+  background:#0f0f1e;
+  font-family:sans-serif;
 }
 
-#page-1 > div{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-.instruction-text{
-  color:#fff;
-  font-family:'Mali',sans-serif;
-  font-size:1.6rem;
-  text-align:center;
-  margin-bottom:14px;
-}
-
+/* cake */
 .cake{
   position:relative;
-  width:190px;
-  height:120px;
-  background:linear-gradient(#fff,#fde2e8);
-  border-radius:18px 18px 8px 8px;
-  box-shadow:0 15px 0 #f7a8c8;
-  margin:60px 0 28px;
+  width:180px;
+  height:110px;
+  background:#fde2e8;
+  border-radius:18px;
 }
 
+/* candle */
 .candle{
   position:absolute;
   width:14px;
-  height:52px;
-  background:linear-gradient(#fff,#ffd6e0);
-  top:-52px;
+  height:50px;
+  background:#ffd6e0;
+  top:-50px;
   left:50%;
   transform:translateX(-50%);
-  border-radius:4px;
 }
 
+/* 🔥 flame (default = hidden) */
 .flame{
   position:absolute;
   width:20px;
   height:30px;
   background:#ffda44;
   border-radius:50% 50% 25% 25%;
-  top:-36px;
+  top:-34px;
   left:50%;
-  transform:translateX(-50%);
+  transform:translateX(-50%) scale(.3);
   box-shadow:0 0 30px #ffda44;
+  opacity:0;
+  transition:opacity .4s ease, transform .4s ease;
+}
+
+/* flame ON */
+.flame.on{
+  opacity:1;
+  transform:translateX(-50%) scale(1);
   animation:flicker .12s infinite alternate;
 }
 
+/* flame OFF */
+.flame.off{
+  opacity:0;
+  transform:translateX(-50%) scale(.2);
+}
+
 @keyframes flicker{
-  from{transform:translateX(-50%) scale(1);}
   to{transform:translateX(-52%) scale(1.15);}
 }
 
-.btn-blow{
-  border:2px solid #fff;
-  background:transparent;
-  color:#fff;
-  padding:12px 34px;
-  border-radius:50px;
-  font-size:1rem;
-  cursor:pointer;
-  margin-top:6px;
-  animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(255,255,255,.4);}
-  70%{box-shadow:0 0 0 12px rgba(255,255,255,0);}
-  100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}
-}
-
-/* ---------- PAGE 2 ---------- */
-#page-2{
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#ffe4ec,#fff);
-}
-
-.wish-card{
-  width:90%;
-  max-width:380px;
-  background:rgba(255,255,255,.78);
-  backdrop-filter:blur(14px);
-  border-radius:34px;
-  box-shadow:0 30px 60px rgba(0,0,0,.25);
-  overflow:hidden;
-  animation:cardIn .9s cubic-bezier(.175,.885,.32,1.4);
-}
-
-@keyframes cardIn{
-  0%{transform:translateY(50px) scale(.85);opacity:0;}
-  60%{transform:translateY(-6px) scale(1.02);opacity:1;}
-  100%{transform:none;}
-}
-
-.wish-image{
-  position:relative;
-  height:240px;
-}
-
-.wish-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  filter:brightness(.95) saturate(1.05);
-}
-
-.wish-image::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.35));
-}
-
-.wish-content{
-  padding:28px 26px 34px;
-  text-align:center;
-}
-
-.wish-title{
-  font-family:'Caveat',cursive;
-  font-size:3.4rem;
-  color:var(--pink);
-  margin:0;
-}
-
-.wish-text{
-  font-family:'Mali',sans-serif;
-  font-size:1.05rem;
-  line-height:1.9;
-  color:#444;
-  margin-top:18px;
-  word-break:break-word;
-}
-
-.btn-replay{
-  margin-top:18px;
+button{
+  margin-top:40px;
+  padding:10px 24px;
+  border-radius:30px;
   border:none;
-  background:var(--pink);
-  color:#fff;
-  padding:10px 26px;
-  border-radius:50px;
-  font-family:'Mali',sans-serif;
   cursor:pointer;
-}
-
-/* HEART */
-#heart-container{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-}
-
-.heart-float{
-  position:absolute;
-  animation:floatUp 3s linear;
-}
-
-@keyframes floatUp{
-  from{transform:translateY(0) scale(1);opacity:1;}
-  to{transform:translateY(-260px) scale(1.6);opacity:0;}
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bg-music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b6c8b8b6c.mp3" type="audio/mpeg">
-</audio>
-
-<!-- PAGE 1 -->
-<div id="page-1">
-  <div>
-    <p class="instruction-text">หลับตา... แล้วอธิษฐานนะ</p>
-    <div class="cake">
-      <div class="candle"><div class="flame" id="flame"></div></div>
-    </div>
-    <button class="btn-blow" onclick="blowOut()">เป่าเทียนเลย ✨</button>
-  </div>
-</div>
-
-<!-- PAGE 2 -->
-<div id="page-2">
-  <div class="wish-card">
-    <div class="wish-image">
-      <img src="https://sv1.img.in.th/7xpllp.jpeg" alt="memory">
-    </div>
-    <div class="wish-content">
-      <h1 class="wish-title">Happy Birthday!</h1>
-      <div class="wish-text">
-        สุขสันต์วันเกิดนะไอ้หมู 💕<br>
-        ขอให้คำอธิษฐานสมหวังทุกอย่าง<br>
-        ขอให้ปีนี้เป็นปีที่อบอุ่น<br>
-        และมีรอยยิ้มแบบนี้เสมอ<br>
-        <strong>รักที่สุดเลย ❤️</strong>
-      </div>
-      <button class="btn-replay" onclick="location.reload()">อ่านอีกครั้ง 💌</button>
+<div>
+  <div class="cake">
+    <div class="candle">
+      <div class="flame" id="flame"></div>
     </div>
   </div>
-  <div id="heart-container"></div>
+
+  <div style="text-align:center;">
+    <button onclick="turnOn()">จุดไฟ 🔥</button>
+    <button onclick="blowOut()">เป่า 💨</button>
+  </div>
 </div>
 
 <script>
-let heartInterval;
+const flame = document.getElementById("flame");
+let hasBlown = false;
 
+/* จุดไฟ */
+function turnOn(){
+  flame.classList.remove("off");
+  flame.classList.add("on");
+  hasBlown = false;
+}
+
+/* เป่าเทียน */
 function blowOut(){
-  document.getElementById('flame').style.display='none';
-
-  const music=document.getElementById('bg-music');
-  music.volume=.35;
-  music.play();
-
-  confetti({particleCount:40,spread:50,origin:{y:.6}});
-  if(navigator.vibrate) navigator.vibrate([80,40,80]);
-
-  setTimeout(()=>{
-    document.getElementById('page-1').style.opacity='0';
-    setTimeout(()=>{
-      document.getElementById('page-1').style.display='none';
-      document.getElementById('page-2').style.display='flex';
-      confetti({particleCount:160,spread:80,origin:{y:.6}});
-      startHearts();
-    },900);
-  },700);
+  if(hasBlown) return;
+  hasBlown = true;
+  flame.classList.remove("on");
+  flame.classList.add("off");
 }
-
-function startHearts(){
-  heartInterval=setInterval(createHeart,400);
-  setTimeout(()=>clearInterval(heartInterval),20000);
-}
-
-function createHeart(){
-  const h=document.createElement('div');
-  h.className='heart-float';
-  h.textContent='❤️';
-  h.style.left=Math.random()*100+'vw';
-  h.style.top='85vh';
-  h.style.fontSize=(Math.random()*12+16)+'px';
-  document.getElementById('heart-container').appendChild(h);
-  setTimeout(()=>h.remove(),3000);
-}
-
-/* 🎤 เป่าเทียนด้วยเสียงลม */
-navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-  const ctx=new AudioContext();
-  const mic=ctx.createMediaStreamSource(stream);
-  const analyser=ctx.createAnalyser();
-  mic.connect(analyser);
-  const data=new Uint8Array(analyser.frequencyBinCount);
-
-  function listen(){
-    analyser.getByteFrequencyData(data);
-    const vol=data.reduce((a,b)=>a+b)/data.length;
-    if(vol>55) blowOut();
-    else requestAnimationFrame(listen);
-  }
-  listen();
-});
 </script>
 
 </body>
