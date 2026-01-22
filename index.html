@@ -3,19 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HBD My Special One</title>
+<title>HBD My Special One 🎂</title>
 
+<!-- Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script src="https://w.soundcloud.com/player/api.js"></script>
 
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;600&family=Caveat:wght@700&family=Mali:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --pink:#ff85a2;
+  --soft-pink:#ffe4ec;
+  --dark:#1a1a2e;
 }
 
-*{box-sizing:border-box}
+*{box-sizing:border-box;}
+
 html,body{
   margin:0;
   width:100%;
@@ -46,6 +50,8 @@ html,body{
   color:#fff;
   font-family:'Mali',sans-serif;
   font-size:1.6rem;
+  text-align:center;
+  margin-bottom:14px;
 }
 
 .cake{
@@ -62,10 +68,11 @@ html,body{
   position:absolute;
   width:14px;
   height:52px;
-  background:#ffd6e0;
+  background:linear-gradient(#fff,#ffd6e0);
   top:-52px;
   left:50%;
   transform:translateX(-50%);
+  border-radius:4px;
 }
 
 .flame{
@@ -82,16 +89,26 @@ html,body{
 }
 
 @keyframes flicker{
+  from{transform:translateX(-50%) scale(1);}
   to{transform:translateX(-52%) scale(1.15);}
 }
 
-.btn{
+.btn-blow{
   border:2px solid #fff;
   background:transparent;
   color:#fff;
   padding:12px 34px;
   border-radius:50px;
+  font-size:1rem;
   cursor:pointer;
+  margin-top:6px;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.4);}
+  70%{box-shadow:0 0 0 12px rgba(255,255,255,0);}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}
 }
 
 /* ---------- PAGE 2 ---------- */
@@ -107,13 +124,20 @@ html,body{
 .wish-card{
   width:90%;
   max-width:380px;
-  background:rgba(255,255,255,.85);
-  border-radius:32px;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(14px);
+  border-radius:34px;
   box-shadow:0 30px 60px rgba(0,0,0,.25);
   overflow:hidden;
+  animation:cardIn .9s cubic-bezier(.175,.885,.32,1.4);
 }
 
-/* IMAGE */
+@keyframes cardIn{
+  0%{transform:translateY(50px) scale(.85);opacity:0;}
+  60%{transform:translateY(-6px) scale(1.02);opacity:1;}
+  100%{transform:none;}
+}
+
 .wish-image{
   position:relative;
   height:240px;
@@ -123,6 +147,7 @@ html,body{
   width:100%;
   height:100%;
   object-fit:cover;
+  filter:brightness(.95) saturate(1.05);
 }
 
 .wish-image::after{
@@ -132,127 +157,151 @@ html,body{
   background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.35));
 }
 
-/* CONTENT */
 .wish-content{
-  padding:28px;
+  padding:28px 26px 34px;
   text-align:center;
 }
 
 .wish-title{
   font-family:'Caveat',cursive;
-  font-size:3.2rem;
+  font-size:3.4rem;
   color:var(--pink);
+  margin:0;
 }
 
 .wish-text{
   font-family:'Mali',sans-serif;
+  font-size:1.05rem;
   line-height:1.9;
   color:#444;
+  margin-top:18px;
+  word-break:break-word;
 }
 
-.controls{
-  margin-top:16px;
-  display:flex;
-  justify-content:center;
-  gap:10px;
-}
-
-.controls button{
+.btn-replay{
+  margin-top:18px;
+  border:none;
   background:var(--pink);
   color:#fff;
-  border:none;
-  padding:10px 18px;
-  border-radius:20px;
+  padding:10px 26px;
+  border-radius:50px;
+  font-family:'Mali',sans-serif;
   cursor:pointer;
 }
 
-/* hidden soundcloud */
-#sc-wrap{display:none;}
+/* HEART */
+#heart-container{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.heart-float{
+  position:absolute;
+  animation:floatUp 3s linear;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(0) scale(1);opacity:1;}
+  to{transform:translateY(-260px) scale(1.6);opacity:0;}
+}
 </style>
 </head>
 
 <body>
 
+<audio id="bg-music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b6c8b8b6c.mp3" type="audio/mpeg">
+</audio>
+
 <!-- PAGE 1 -->
 <div id="page-1">
   <div>
-    <p class="instruction-text">หลับตา… แล้วอธิษฐานนะ</p>
+    <p class="instruction-text">หลับตา... แล้วอธิษฐานนะ</p>
     <div class="cake">
-      <div class="candle">
-        <div class="flame" id="flame"></div>
-      </div>
+      <div class="candle"><div class="flame" id="flame"></div></div>
     </div>
-    <button class="btn" onclick="blowOut()">เป่าเทียนเลย ✨</button>
+    <button class="btn-blow" onclick="blowOut()">เป่าเทียนเลย ✨</button>
   </div>
 </div>
 
 <!-- PAGE 2 -->
 <div id="page-2">
   <div class="wish-card">
-
-    <!-- 🔥 รูปกลับมาแล้ว -->
     <div class="wish-image">
       <img src="https://sv1.img.in.th/7xpllp.jpeg" alt="memory">
     </div>
-
     <div class="wish-content">
       <h1 class="wish-title">Happy Birthday!</h1>
-      <p class="wish-text">
-        สุขสันต์วันเกิดนะไอ้หมู<br>
-        ขอให้คำอธิษฐานเมื่อกี้สมหวังทุกอย่าง<br>
-        จะคอยอยู่ข้าง ๆ และซัพพอร์ตเสมอ<br>
-        <strong>รักที่สุด ❤️</strong>
-      </p>
-
-      <div class="controls">
-        <button onclick="toggleMusic()">🔊 เพลง</button>
-        <button onclick="location.reload()">💌 อ่านอีกครั้ง</button>
+      <div class="wish-text">
+        สุขสันต์วันเกิดนะไอ้หมู 💕<br>
+        ขอให้คำอธิษฐานสมหวังทุกอย่าง<br>
+        ขอให้ปีนี้เป็นปีที่อบอุ่น<br>
+        และมีรอยยิ้มแบบนี้เสมอ<br>
+        <strong>รักที่สุดเลย ❤️</strong>
       </div>
+      <button class="btn-replay" onclick="location.reload()">อ่านอีกครั้ง 💌</button>
     </div>
   </div>
-</div>
-
-<!-- SoundCloud -->
-<div id="sc-wrap">
-<iframe id="sc-player"
-  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/happy-birthday-official/happy-birthday-funk&auto_play=false&hide_related=true&show_comments=false&show_user=false"
-  allow="autoplay">
-</iframe>
+  <div id="heart-container"></div>
 </div>
 
 <script>
-let widget,playing=false;
-
-window.onload=()=>{
-  widget=SC.Widget(document.getElementById('sc-player'));
-};
+let heartInterval;
 
 function blowOut(){
-  flame.style.display='none';
-  confetti({particleCount:80,spread:70});
-  navigator.vibrate?.(80);
+  document.getElementById('flame').style.display='none';
 
-  widget.play();
-  widget.setVolume(0);
-  let v=0;
-  const f=setInterval(()=>{
-    v+=5; widget.setVolume(v);
-    if(v>=100) clearInterval(f);
-  },80);
+  const music=document.getElementById('bg-music');
+  music.volume=.35;
+  music.play();
+
+  confetti({particleCount:40,spread:50,origin:{y:.6}});
+  if(navigator.vibrate) navigator.vibrate([80,40,80]);
 
   setTimeout(()=>{
-    page1.style.opacity='0';
+    document.getElementById('page-1').style.opacity='0';
     setTimeout(()=>{
-      page1.style.display='none';
-      page2.style.display='flex';
+      document.getElementById('page-1').style.display='none';
+      document.getElementById('page-2').style.display='flex';
+      confetti({particleCount:160,spread:80,origin:{y:.6}});
+      startHearts();
     },900);
   },700);
 }
 
-function toggleMusic(){
-  playing?widget.pause():widget.play();
-  playing=!playing;
+function startHearts(){
+  heartInterval=setInterval(createHeart,400);
+  setTimeout(()=>clearInterval(heartInterval),20000);
 }
+
+function createHeart(){
+  const h=document.createElement('div');
+  h.className='heart-float';
+  h.textContent='❤️';
+  h.style.left=Math.random()*100+'vw';
+  h.style.top='85vh';
+  h.style.fontSize=(Math.random()*12+16)+'px';
+  document.getElementById('heart-container').appendChild(h);
+  setTimeout(()=>h.remove(),3000);
+}
+
+/* 🎤 เป่าเทียนด้วยเสียงลม */
+navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+  const ctx=new AudioContext();
+  const mic=ctx.createMediaStreamSource(stream);
+  const analyser=ctx.createAnalyser();
+  mic.connect(analyser);
+  const data=new Uint8Array(analyser.frequencyBinCount);
+
+  function listen(){
+    analyser.getByteFrequencyData(data);
+    const vol=data.reduce((a,b)=>a+b)/data.length;
+    if(vol>55) blowOut();
+    else requestAnimationFrame(listen);
+  }
+  listen();
+});
 </script>
 
 </body>
