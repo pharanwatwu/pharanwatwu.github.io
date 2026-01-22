@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HBD My Special One</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;600&family=Caveat:wght@700&family=Mali:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --pink:#ff85a2;
+  --soft-pink:#ffe4ec;
+  --dark:#1a1a2e;
+}
+
+*{box-sizing:border-box;}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  font-family:'Kanit',sans-serif;
+  overflow:hidden;
+}
+
+/* ---------- PAGE 1 ---------- */
+#page-1{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at top,#2a2a5a,#0f0f1e);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+  transition:opacity 1s ease;
+}
+
+.instruction-text{
+  color:#fff;
+  font-family:'Mali',sans-serif;
+  font-size:1.6rem;
+  text-align:center;
+  margin-bottom:20px;
+  opacity:.9;
+}
+
+.cake{
+  position:relative;
+  width:190px;
+  height:120px;
+  background:linear-gradient(#fff,#fde2e8);
+  border-radius:18px 18px 8px 8px;
+  box-shadow:0 15px 0 #f7a8c8;
+  margin:90px auto 40px;
+}
+
+.candle{
+  position:absolute;
+  width:14px;
+  height:52px;
+  background:linear-gradient(#fff,#ffd6e0);
+  top:-52px;
+  left:50%;
+  transform:translateX(-50%);
+  border-radius:4px;
+}
+
+.flame{
+  position:absolute;
+  width:20px;
+  height:30px;
+  background:#ffda44;
+  border-radius:50% 50% 25% 25%;
+  top:-36px;
+  left:50%;
+  transform:translateX(-50%);
+  box-shadow:0 0 30px #ffda44;
+  animation:flicker .12s infinite alternate;
+}
+
+@keyframes flicker{
+  from{transform:translateX(-50%) scale(1);}
+  to{transform:translateX(-52%) scale(1.15);}
+}
+
+.btn-blow{
+  border:2px solid #fff;
+  background:transparent;
+  color:#fff;
+  padding:12px 34px;
+  border-radius:50px;
+  font-size:1rem;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.btn-blow:hover{
+  background:#fff;
+  color:#1a1a2e;
+}
+
+/* ---------- PAGE 2 ---------- */
+#page-2{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffe4ec,#fff);
+}
+
+.wish-card{
+  width:90%;
+  max-width:380px;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(14px);
+  border-radius:34px;
+  box-shadow:0 30px 60px rgba(0,0,0,.25);
+  overflow:hidden;
+  animation:cardIn .9s cubic-bezier(.175,.885,.32,1.4);
+}
+
+@keyframes cardIn{
+  from{transform:translateY(40px) scale(.9);opacity:0;}
+  to{transform:none;opacity:1;}
+}
+
+/* IMAGE */
+.wish-image{
+  position:relative;
+  height:240px;
+}
+
+.wish-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.wish-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.35));
+}
+
+/* CONTENT */
+.wish-content{
+  padding:28px 26px 34px;
+  text-align:center;
+}
+
+.wish-title{
+  font-family:'Caveat',cursive;
+  font-size:3.4rem;
+  color:var(--pink);
+  margin:0;
+}
+
+.wish-text{
+  font-family:'Mali',sans-serif;
+  font-size:1.1rem;
+  line-height:1.9;
+  color:#444;
+  margin-top:18px;
+  text-wrap-mode: nowrap;
+}
+
+/* HEART */
+#heart-container{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.heart-float{
+  position:absolute;
+  animation:floatUp 3s linear;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(0) scale(1);opacity:1;}
+  to{transform:translateY(-260px) scale(1.6);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div id="page-1">
+  <div>
+    <p class="instruction-text">หลับตา... แล้วอธิษฐานนะ</p>
+    <div class="cake">
+      <div class="candle"><div class="flame" id="flame"></div></div>
+    </div>
+    <button class="btn-blow" onclick="blowOut()">เป่าเทียนเลย ✨</button>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page-2">
+  <div class="wish-card">
+    <div class="wish-image">
+      <img src="https://sv1.img.in.th/7xpllp.jpeg" alt="memory">
+    </div>
+
+    <div class="wish-content">
+      <h1 class="wish-title">Happy Birthday!</h1>
+      <div class="wish-text">
+        สุขสันต์วันเกิดนะไอ้หมู... <br>
+        ขอให้คำอธิษฐานเมื่อกี้สมหวังทุกสิ่งนะ <br>
+        ขอให้ปีนี้เป็นปีที่ดีกับหนูน่ะ <br>
+        จะคอยอยู่ข้างๆ และคอยซัพพอร์ตเสมอน่ะ <br>
+        <strong>รักที่สุดเลย ❤️</strong>
+      </div>
+    </div>
+  </div>
+
+  <div id="heart-container"></div>
+</div>
+
+<script>
+function blowOut(){
+  document.getElementById('flame').style.display='none';
+
+  confetti({particleCount:40,spread:50,origin:{y:.6}});
+
+  setTimeout(()=>{
+    document.getElementById('page-1').style.opacity='0';
+    setTimeout(()=>{
+      document.getElementById('page-1').style.display='none';
+      document.getElementById('page-2').style.display='flex';
+
+      confetti({particleCount:160,spread:80,origin:{y:.6}});
+      setInterval(createHeart,400);
+    },900);
+  },700);
+}
+
+function createHeart(){
+  const h=document.createElement('div');
+  h.className='heart-float';
+  h.textContent='❤️';
+  h.style.left=Math.random()*100+'vw';
+  h.style.top='85vh';
+  h.style.fontSize=(Math.random()*12+16)+'px';
+  document.getElementById('heart-container').appendChild(h);
+  setTimeout(()=>h.remove(),3000);
+}
+</script>
+
+</body>
+</html>
