@@ -3,113 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Candle Flame Control</title>
+<title>HBD My Special One</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://w.soundcloud.com/player/api.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;600&family=Caveat:wght@700&family=Mali:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body{
+:root{
+  --pink:#ff85a2;
+}
+
+*{box-sizing:border-box}
+html,body{
   margin:0;
-  height:100vh;
+  width:100%;
+  height:100%;
+  font-family:'Kanit',sans-serif;
+  overflow:hidden;
+}
+
+/* ---------- PAGE 1 ---------- */
+#page-1{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at top,#2a2a5a,#0f0f1e);
   display:flex;
   justify-content:center;
   align-items:center;
-  background:#0f0f1e;
-  font-family:sans-serif;
+  z-index:10;
+  transition:opacity 1s ease;
 }
 
-/* cake */
+#page-1 > div{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.instruction-text{
+  color:#fff;
+  font-family:'Mali',sans-serif;
+  font-size:1.6rem;
+}
+
 .cake{
   position:relative;
-  width:180px;
-  height:110px;
-  background:#fde2e8;
-  border-radius:18px;
+  width:190px;
+  height:120px;
+  background:linear-gradient(#fff,#fde2e8);
+  border-radius:18px 18px 8px 8px;
+  box-shadow:0 15px 0 #f7a8c8;
+  margin:60px 0 28px;
 }
 
-/* candle */
 .candle{
   position:absolute;
   width:14px;
-  height:50px;
+  height:52px;
   background:#ffd6e0;
-  top:-50px;
+  top:-52px;
   left:50%;
   transform:translateX(-50%);
 }
 
-/* 🔥 flame (default = hidden) */
 .flame{
   position:absolute;
   width:20px;
   height:30px;
   background:#ffda44;
   border-radius:50% 50% 25% 25%;
-  top:-34px;
+  top:-36px;
   left:50%;
-  transform:translateX(-50%) scale(.3);
+  transform:translateX(-50%);
   box-shadow:0 0 30px #ffda44;
-  opacity:0;
-  transition:opacity .4s ease, transform .4s ease;
-}
-
-/* flame ON */
-.flame.on{
-  opacity:1;
-  transform:translateX(-50%) scale(1);
   animation:flicker .12s infinite alternate;
-}
-
-/* flame OFF */
-.flame.off{
-  opacity:0;
-  transform:translateX(-50%) scale(.2);
 }
 
 @keyframes flicker{
   to{transform:translateX(-52%) scale(1.15);}
 }
 
-button{
-  margin-top:40px;
-  padding:10px 24px;
-  border-radius:30px;
-  border:none;
+.btn{
+  border:2px solid #fff;
+  background:transparent;
+  color:#fff;
+  padding:12px 34px;
+  border-radius:50px;
   cursor:pointer;
 }
+
+/* ---------- PAGE 2 ---------- */
+#page-2{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffe4ec,#fff);
+}
+
+.wish-card{
+  width:90%;
+  max-width:380px;
+  background:rgba(255,255,255,.85);
+  border-radius:32px;
+  box-shadow:0 30px 60px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+
+/* IMAGE */
+.wish-image{
+  position:relative;
+  height:240px;
+}
+
+.wish-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.wish-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.35));
+}
+
+/* CONTENT */
+.wish-content{
+  padding:28px;
+  text-align:center;
+}
+
+.wish-title{
+  font-family:'Caveat',cursive;
+  font-size:3.2rem;
+  color:var(--pink);
+}
+
+.wish-text{
+  font-family:'Mali',sans-serif;
+  line-height:1.9;
+  color:#444;
+}
+
+.controls{
+  margin-top:16px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+}
+
+.controls button{
+  background:var(--pink);
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+/* hidden soundcloud */
+#sc-wrap{display:none;}
 </style>
 </head>
 
 <body>
 
-<div>
-  <div class="cake">
-    <div class="candle">
-      <div class="flame" id="flame"></div>
+<!-- PAGE 1 -->
+<div id="page-1">
+  <div>
+    <p class="instruction-text">หลับตา… แล้วอธิษฐานนะ</p>
+    <div class="cake">
+      <div class="candle">
+        <div class="flame" id="flame"></div>
+      </div>
     </div>
-  </div>
-
-  <div style="text-align:center;">
-    <button onclick="turnOn()">จุดไฟ 🔥</button>
-    <button onclick="blowOut()">เป่า 💨</button>
+    <button class="btn" onclick="blowOut()">เป่าเทียนเลย ✨</button>
   </div>
 </div>
 
-<script>
-const flame = document.getElementById("flame");
-let hasBlown = false;
+<!-- PAGE 2 -->
+<div id="page-2">
+  <div class="wish-card">
 
-/* จุดไฟ */
-function turnOn(){
-  flame.classList.remove("off");
-  flame.classList.add("on");
-  hasBlown = false;
+    <!-- 🔥 รูปกลับมาแล้ว -->
+    <div class="wish-image">
+      <img src="https://sv1.img.in.th/7xpllp.jpeg" alt="memory">
+    </div>
+
+    <div class="wish-content">
+      <h1 class="wish-title">Happy Birthday!</h1>
+      <p class="wish-text">
+        สุขสันต์วันเกิดนะไอ้หมู<br>
+        ขอให้คำอธิษฐานเมื่อกี้สมหวังทุกอย่าง<br>
+        จะคอยอยู่ข้าง ๆ และซัพพอร์ตเสมอ<br>
+        <strong>รักที่สุด ❤️</strong>
+      </p>
+
+      <div class="controls">
+        <button onclick="toggleMusic()">🔊 เพลง</button>
+        <button onclick="location.reload()">💌 อ่านอีกครั้ง</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SoundCloud -->
+<div id="sc-wrap">
+<iframe id="sc-player"
+  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/happy-birthday-official/happy-birthday-funk&auto_play=false&hide_related=true&show_comments=false&show_user=false"
+  allow="autoplay">
+</iframe>
+</div>
+
+<script>
+let widget,playing=false;
+
+window.onload=()=>{
+  widget=SC.Widget(document.getElementById('sc-player'));
+};
+
+function blowOut(){
+  flame.style.display='none';
+  confetti({particleCount:80,spread:70});
+  navigator.vibrate?.(80);
+
+  widget.play();
+  widget.setVolume(0);
+  let v=0;
+  const f=setInterval(()=>{
+    v+=5; widget.setVolume(v);
+    if(v>=100) clearInterval(f);
+  },80);
+
+  setTimeout(()=>{
+    page1.style.opacity='0';
+    setTimeout(()=>{
+      page1.style.display='none';
+      page2.style.display='flex';
+    },900);
+  },700);
 }
 
-/* เป่าเทียน */
-function blowOut(){
-  if(hasBlown) return;
-  hasBlown = true;
-  flame.classList.remove("on");
-  flame.classList.add("off");
+function toggleMusic(){
+  playing?widget.pause():widget.play();
+  playing=!playing;
 }
 </script>
 
