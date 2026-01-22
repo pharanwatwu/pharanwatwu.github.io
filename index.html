@@ -13,7 +13,6 @@
 <style>
 :root{
   --pink:#ff85a2;
-  --dark:#0f0f1e;
 }
 
 *{box-sizing:border-box}
@@ -47,7 +46,6 @@ html,body{
   color:#fff;
   font-family:'Mali',sans-serif;
   font-size:1.6rem;
-  margin-bottom:12px;
 }
 
 .cake{
@@ -64,7 +62,7 @@ html,body{
   position:absolute;
   width:14px;
   height:52px;
-  background:linear-gradient(#fff,#ffd6e0);
+  background:#ffd6e0;
   top:-52px;
   left:50%;
   transform:translateX(-50%);
@@ -93,9 +91,7 @@ html,body{
   color:#fff;
   padding:12px 34px;
   border-radius:50px;
-  font-size:1rem;
   cursor:pointer;
-  margin-top:6px;
 }
 
 /* ---------- PAGE 2 ---------- */
@@ -117,6 +113,26 @@ html,body{
   overflow:hidden;
 }
 
+/* IMAGE */
+.wish-image{
+  position:relative;
+  height:240px;
+}
+
+.wish-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.wish-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.35));
+}
+
+/* CONTENT */
 .wish-content{
   padding:28px;
   text-align:center;
@@ -173,17 +189,24 @@ html,body{
 <!-- PAGE 2 -->
 <div id="page-2">
   <div class="wish-card">
+
+    <!-- 🔥 รูปกลับมาแล้ว -->
+    <div class="wish-image">
+      <img src="https://sv1.img.in.th/7xpllp.jpeg" alt="memory">
+    </div>
+
     <div class="wish-content">
       <h1 class="wish-title">Happy Birthday!</h1>
       <p class="wish-text">
         สุขสันต์วันเกิดนะไอ้หมู<br>
-        ขอให้ปีนี้ใจดีมาก ๆ กับหนู<br>
-        จะอยู่ข้าง ๆ เสมอ ❤️
+        ขอให้คำอธิษฐานเมื่อกี้สมหวังทุกอย่าง<br>
+        จะคอยอยู่ข้าง ๆ และซัพพอร์ตเสมอ<br>
+        <strong>รักที่สุด ❤️</strong>
       </p>
 
       <div class="controls">
         <button onclick="toggleMusic()">🔊 เพลง</button>
-        <button onclick="replay()">💌 อ่านอีกครั้ง</button>
+        <button onclick="location.reload()">💌 อ่านอีกครั้ง</button>
       </div>
     </div>
   </div>
@@ -192,31 +215,33 @@ html,body{
 <!-- SoundCloud -->
 <div id="sc-wrap">
 <iframe id="sc-player"
-  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/happy-birthday-official/happy-birthday-funk&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false"
+  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/happy-birthday-official/happy-birthday-funk&auto_play=false&hide_related=true&show_comments=false&show_user=false"
   allow="autoplay">
 </iframe>
 </div>
 
 <script>
-let widget;
-let playing=false;
+let widget,playing=false;
 
 window.onload=()=>{
-  widget = SC.Widget(document.getElementById('sc-player'));
+  widget=SC.Widget(document.getElementById('sc-player'));
 };
 
 function blowOut(){
-  document.getElementById('flame').style.display='none';
-
-  confetti({particleCount:60,spread:60,origin:{y:.6}});
+  flame.style.display='none';
+  confetti({particleCount:80,spread:70});
   navigator.vibrate?.(80);
 
   widget.play();
   widget.setVolume(0);
-  fadeIn();
+  let v=0;
+  const f=setInterval(()=>{
+    v+=5; widget.setVolume(v);
+    if(v>=100) clearInterval(f);
+  },80);
 
   setTimeout(()=>{
-    document.getElementById('page-1').style.opacity='0';
+    page1.style.opacity='0';
     setTimeout(()=>{
       page1.style.display='none';
       page2.style.display='flex';
@@ -224,24 +249,9 @@ function blowOut(){
   },700);
 }
 
-function fadeIn(){
-  let v=0;
-  const i=setInterval(()=>{
-    v+=4;
-    widget.setVolume(v);
-    if(v>=100) clearInterval(i);
-  },80);
-  playing=true;
-}
-
 function toggleMusic(){
-  if(playing){ widget.pause(); }
-  else{ widget.play(); }
+  playing?widget.pause():widget.play();
   playing=!playing;
-}
-
-function replay(){
-  location.reload();
 }
 </script>
 
