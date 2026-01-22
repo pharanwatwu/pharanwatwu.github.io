@@ -234,10 +234,10 @@ html,body{
     <div class="wish-content">
       <h1 class="wish-title">Happy Birthday!</h1>
       <div class="wish-text">
-        สุขสันต์วันเกิดนะไอ้หมู 💕<br>
-        ขอให้คำอธิษฐานสมหวังทุกอย่าง<br>
-        ขอให้ปีนี้เป็นปีที่อบอุ่น<br>
-        และมีรอยยิ้มแบบนี้เสมอ<br>
+        สุขสันต์วันเกิดนะไอ้หมู... <br>
+        ขอให้คำอธิษฐานเมื่อกี้สมหวังทุกสิ่งนะ <br>
+        ขอให้ปีนี้เป็นปีที่ดีกับหนูน่ะ <br>
+        จะคอยอยู่ข้างๆ และคอยซัพพอร์ตเสมอน่ะ <br>
         <strong>รักที่สุดเลย ❤️</strong>
       </div>
       <button class="btn-replay" onclick="location.reload()">อ่านอีกครั้ง 💌</button>
@@ -248,9 +248,10 @@ html,body{
 
 <script>
 let heartInterval;
+  document.getElementById('flame').style.display='none';
 
 function blowOut(){
-  document.getElementById('flame').style.display='none';
+  document.getElementById('flame').style.display='block';
 
   const music=document.getElementById('bg-music');
   music.volume=.35;
